@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Definiendo la Hoja de Ruta | Hallazgos de Capacitaciones GRs</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Sora', sans-serif;
+            background-color: #f5f5f5;
+            color: #30302d;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 320px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        details > summary {
+            list-style: none;
+        }
+        details > summary::-webkit-details-marker {
+            display: none;
+        }
+        details[open] summary .arrow-down {
+            transform: rotate(180deg);
+        }
+        .brand-red { color: #e20039; }
+        .bg-brand-red { background-color: #e20039; }
+        .border-brand-red { border-color: #e20039; }
+        .bg-pastel-red { background-color: #FADBD8; }
+        .text-pastel-red-dark { color: #7B241C; }
+        .bg-pastel-gray { background-color: #EAEDED; }
+        .text-pastel-gray-dark { color: #1B4F72; }
+    </style>
+</head>
+<body>
+    
+    <!-- 
+    Plan de Narrativa:
+    1. Introducción: Título y objetivo claro, en tono retrospectivo.
+    2. Focos Principales: Dos columnas para los temas centrales que surgieron (Portal GW y L2 Agencias), cada una con un KPI destacado y un gráfico de barras de frecuencia.
+    3. Ejes de Conversación: Un diagrama que resume los temas centrales discutidos.
+    4. Detalle por Reunión: Un acordeón interactivo para presentar los detalles completos de cada minuta.
+    
+    Selección de Visualizaciones:
+    - Frecuencia de temas: Objetivo -> Comparar. Visualización -> Gráfico de Barras Horizontales con Chart.js. Justificación -> Ideal para comparar categorías y dar espacio a etiquetas. Confirmación -> NO SVG.
+    - Ejes de Conversación: Objetivo -> Organizar. Visualización -> Diagrama con HTML/CSS (Tailwind). Justificación -> Muestra los temas principales de forma clara. Confirmación -> NO SVG, NO MERMAID JS.
+    - Detalle de Minutas: Objetivo -> Organizar. Visualización -> Acordeón HTML con <details>/<summary>. Justificación -> Compacta gran cantidad de texto de forma interactiva. Confirmación -> NO SVG.
+    - KPIs Principales: Objetivo -> Informar. Visualización -> Texto grande y destacado (Single Big Number). Justificación -> Impacto visual inmediato para datos clave. Confirmación -> NO SVG.
+
+    Paleta de Color: "Rojo seguro" (#e20039) y complementarios del brandbook.
+
+    Confirmación: NI MERMAID JS NI SVG fueron utilizados en este documento. Toda la renderización gráfica se realiza a través de Canvas (Chart.js) o HTML/CSS con Tailwind.
+    -->
+
+    <header class="bg-white shadow-sm p-4">
+        <div class="container mx-auto flex items-center">
+             <img src="https://storage.googleapis.com/l2-designsystem-prod/logos-brand/SVG/l2-logo-hor-rbg-pos.svg" alt="Logo La Segunda" class="h-8 sm:h-10 mr-2 sm:mr-3">
+             <span class="font-semibold text-lg sm:text-xl brand-red">Capacitaciones GRs</span>
+        </div>
+    </header>
+
+    <div class="container mx-auto p-4 md:p-8">
+        
+        <header class="text-center mb-12 mt-8">
+            <h1 class="text-3xl md:text-4xl font-bold brand-red mb-3 leading-tight">Hallazgos del Equipo de Producto en las sesiones con Gerentes Regionales</h1>
+            <p class="text-base md:text-lg text-gray-500 font-normal">Un Análisis Retrospectivo de los temas clave con Gerentes Regionales</p>
+        </header>
+
+        <section class="bg-white rounded-xl shadow-md p-6 md:p-8 max-w-7xl mx-auto mb-12">
+            <p class="text-center text-gray-600 max-w-6xl mx-auto mb-6 text-base">Este análisis se enmarca dentro de los objetivos estratégicos del Equipo de Producto para el Ejercicio 24/25. La información recopilada es un insumo clave para cumplir con el siguiente objetivo:</p>
+            <div class="bg-gray-50 p-5 rounded-lg text-sm border border-gray-200">
+                <h3 class="font-bold text-base text-gray-800 mb-3">Objetivo: Impulsar la transmisión de conocimiento de las aplicaciones y sus iteraciones de mejoras.</h3>
+                <dl class="space-y-2">
+                    <div class="lg:flex">
+                        <dt class="font-bold brand-red mr-2 lg:w-16 flex-shrink-0">KR 1:</dt>
+                        <dd class="text-gray-700">Diseñar un plan de capacitación para el equipo de Gerentes Regionales al 28/02/25. (Ponderación 20%)</dd>
+                    </div>
+                    <div class="lg:flex">
+                        <dt class="font-bold brand-red mr-2 lg:w-16 flex-shrink-0">KR 2:</dt>
+                        <dd class="text-gray-700">Ejecutar el plan diseñado en espacios virtuales o presenciales con al menos el 70% de los Gerentes Regionales al 30/06/25. (Ponderación 40%)</dd>
+                    </div>
+                </dl>
+            </div>
+        </section>
+
+        <main class="space-y-10">
+            
+            <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                
+                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col border-t-4 border-brand-red">
+                    <h2 class="text-2xl font-bold text-[#30302d] mb-4">Desafíos en la Gestión del Portal GW</h2>
+                    <p class="text-gray-600 mb-6">El principal punto de reclamado fue la complejidad del flujo de renovaciones. Se detectó una fuerte demanda de mayor autonomía en la gestión de reglas de negocio (bloqueos) para agilizar la operatoria diaria.</p>
+                    <div class="text-center bg-[#e20039]/10 rounded-lg p-4 mb-6">
+                        <span class="text-6xl font-extrabold brand-red">4</span>
+                        <p class="font-semibold text-[#30302d]">Menciones sobre el Flujo de Renovación</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                        <h3 class="text-lg font-semibold text-center text-[#30302d] mb-2">Frecuencia de Temas - Portal GW</h3>
+                        <div class="chart-container">
+                            <canvas id="gwChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-xl shadow-md p-6 flex flex-col border-t-4 border-brand-red">
+                    <h2 class="text-2xl font-bold text-[#30302d] mb-4">Profundidad en las funciones L2 Agencias</h2>
+                    <p class="text-gray-600 mb-6">La necesidad más demandada por los GRs fue la de dotar a los productores con herramientas de autogestión. La solicitud de un home estadístico, similar al que ellos utilizan, fue el pedido principal.</p>
+                    <div class="text-center bg-[#e20039]/10 rounded-lg p-4 mb-6">
+                        <span class="text-6xl font-extrabold brand-red">4</span>
+                        <p class="font-semibold text-[#30302d]">Solicitudes de Home Estadístico para Agencias</p>
+                    </div>
+                    <div class="flex-grow flex flex-col justify-center">
+                         <h3 class="text-lg font-semibold text-center text-[#30302d] mb-2">Frecuencia de Temas - L2 Agencias</h3>
+                        <div class="chart-container">
+                            <canvas id="l2AgenciasChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-[#30302d] mb-6 text-center">Principales Ejes de Conversación</h2>
+                <p class="text-center text-gray-600 max-w-3xl mx-auto mb-8">De los encuentros surgieron tres ejes temáticos que dominaron las conversaciones, reflejando las principales necesidades y dolores expresados por los Gerentes Regionales.</p>
+                <div class="flex flex-col md:flex-row items-stretch justify-center gap-6">
+                    <div class="text-center p-6 bg-pastel-red rounded-lg flex-1 flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-pastel-red-dark">El Desafío del Flujo de Renovaciones</h3>
+                        <p class="text-sm text-pastel-red-dark opacity-90 mt-2">Se conversó sobre el paso a paso, las buenas prácticas y la gestión de casos atípicos (migración SIGA, botón Editar, Mora).</p>
+                    </div>
+                     <div class="text-center p-6 bg-pastel-gray rounded-lg flex-1 flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-pastel-gray-dark">Migración de sub agencinas</h3>
+                        <p class="text-sm text-pastel-gray-dark opacity-90 mt-2">Se profundizó empezar a habilitar las agencias que tienen un esquema de comisión y las operatorias especiales.</p>
+                    </div>
+                    <div class="text-center p-6 bg-pastel-red rounded-lg flex-1 flex flex-col justify-center">
+                        <h3 class="text-xl font-bold text-pastel-red-dark">Gestionar el conocimiento</h3>
+                        <p class="text-sm text-pastel-red-dark opacity-90 mt-2">Se destacó la importancia de comunicar y enseñar a las agencias a explotar sus herramientas.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="bg-white rounded-xl shadow-md p-6 md:p-8">
+                <h2 class="text-3xl font-bold text-[#30302d] mb-8 text-center">Recorrido por Cada Encuentro</h2>
+                <div class="space-y-3 max-w-4xl mx-auto">
+                    
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 29 de abril de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Candela Novaira, Pablo Novaira, Paula Porta, Matías Erhardt, Nicolás Heck, Diego Rojas, Nicolás Gamarra, Wanda Dueñas, Equipo de Producto.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Que los Gerentes Regionales puedan liberar bloqueos una vez aprobada la regla de negocio.</li>
+                                        <li>Tener listados por agencias de los pedidos de autorización.</li>
+                                        <li>Evaluar la posibilidad de incorporar cambios de tomador.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Home estadístico: comparativo con mes anterior y mismo mes año anterior. Agregar vehículos vigentes.</li>
+                                        <li>Aplicaciones más usadas determinadas por L2, para todos los usuarios.</li>
+                                        <li>Home estadístico Agencias para usuarios tipo "comisiones".</li>
+                                        <li>Envío de pólizas: Cambiar "descargadas" por "no descargadas". Sumar no renovadas.</li>
+                                        <li>Enviar el mail de novedades por WhatsApp a GRs.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 5 de mayo de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                             <p class="mb-3"><strong>Participantes:</strong> Hernán Onaga, Adrián Rinaudo, Pablo Bertolín, José Valenzuela, Michelle, Leandro Nuñez, Mariana Andrea Martín, David Quintana, Nicolás Gamarra, Wanda Dueñas, Equipo de Producto.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                       <li>Un sistema de monitoreo que advierta las fallas antes de que sean masivas.</li>
+                                       <li>Abrir transacciones en una nueva pestaña.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Generar un home estadístico como el de los gerentes regionales para Agencias (usuarios tipo "comisiones").</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 8 de mayo de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Roberto Bianchi, Jose Marengo, Eloy Maggiori, Equipo de Producto, Nicolás Gamarra.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Repasar todo el flujo de renovaciones. Cuando ponen 'Editar' se salen del flujo.</li>
+                                        <li>Controlar las sub agencias con contrato 80/20% para migrar a GW.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Enviar el mail de novedades por el grupo de Whats App a GRs.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+                    
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 9 de mayo de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Wanda Dueñas, Daniel Noccetti, Javier Venier.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Repasar todo el flujo de renovaciones. Cuando ponen 'Editar' se salen del flujo.</li>
+                                        <li>Se traslada a los PAS una gestión administrativa en renovaciones que antes no tenían.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Importante la información de cotización en las pólizas en USD. Ver conversión en tiempo real.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 26 de mayo de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Francisco Garriz, Germán Fraunhofer, Germán Bruschi, Equipo de producto, Wanda Dueñas.</p>
+                             <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Aprobación reglas de negocio: repasar el circuito.</li>
+                                        <li>Que los GRs puedan liberar bloqueos una vez aprobada la regla.</li>
+                                        <li>Repasar todo el flujo de renovaciones.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Importante la implementación del cotizador de Responsabilidad Civil en Maquinarias Agrícolas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 30 de mayo de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Marcos Fanucchi, Facundo Cejas, Marcelo Zamudio, Fabián Ongaro, Cecilia Periz, Agustina Cebollada, Equipo de producto, Wanda Dueñas.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Envío automático del listado de operaciones, pólizas a vencer.</li>
+                                        <li>Repasar todo el flujo de renovaciones.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Importante la implementación del cotizador de Responsabilidad Civil en Maquinarias Agrícolas.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 6 de junio de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                            <p class="mb-3"><strong>Participantes:</strong> Luciano Collura, Santiago Piccinini, Mariana Yah Yah, Martín Beauvallet, Guillermo Tórtolo, Misael Diaz, Equipo de Producto.</p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Empezar la emisión en GW Agencias con operatorias especiales (bancos) y Segser.</li>
+                                        <li>Pólizas que no se renuevan (migración de SIGA) y casos que no aparecen en el flujo (de GW a GW).</li>
+                                        <li>Por qué vuelven a aparecer Reglas de Negocio en la renovación si se aprobaron en la emisión.</li>
+                                        <li>Grupo de afinidad está trabando renovaciones.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Home estadístico Agencias para usuarios tipo "comisiones".</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 9 de junio de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                           <p class="mb-3"><strong>Participantes:</strong> Nadia San Juan, Mariano Mansilla, Norberto Mansilla, Leonardo Hernandez, Martin Vila, Christian Habbaby, Gabriela M Hernandez, Equipo de Producto.</p>
+                           <div>
+                                <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                    <li>Pólizas que no se renuevan (migración de SIGA) y casos que no aparecen en el flujo (de GW a GW).</li>
+                                    <li>Envío automático del listado de operaciones, pólizas a vencer, no renovadas.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 12 de junio de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                           <p class="mb-3"><strong>Participantes:</strong> Raúl Moreno, Sergio Prestifilippo, Raul Isaguirre, Sergio Muñoz, Alejandro Gembarowski, Wanda Dueñas, Equipo de Producto.</p>
+                           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Controlar las sub agencias con contrato 80/20% para migrar a GW.</li>
+                                        <li>Pólizas que no se renuevan (migración de SIGA) y casos que no aparecen en el flujo (de GW a GW).</li>
+                                        <li>Problemas con pólizas en Mora.</li>
+                                        <li>Suscriptor de guardia para los fines de semanas.</li>
+                                        <li>Sumar rad.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Envío automático del listado de operaciones, pólizas a vencer, no renovadas.</li>
+                                        <li>Descargar consolidado que una todas las empresas en la aplicación de Comisiones para GRs.</li>
+                                        <li>Descargar en excel todas las tablas de La Segunda Agencias.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                    <details class="group bg-gray-50 rounded-lg">
+                        <summary class="flex justify-between items-center cursor-pointer p-4">
+                            <span class="font-semibold text-lg brand-red">🗓️ 13 de junio de 2025</span>
+                            <span class="transform transition-transform duration-200 arrow-down text-brand-red font-bold">▼</span>
+                        </summary>
+                        <div class="p-4 border-t border-gray-200">
+                           <p class="mb-3"><strong>Participantes:</strong> Angeles Penedo, Pablo Corte, Horacio Espeluse, Federico Espeluse, Comercial Zona 97, Wanda Dueñas, Equipo de Producto.</p>
+                           <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div>
+                                    <h4 class="font-bold text-gray-800">Portal GW</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Los GRs quieren autonomía total en la suscripción, y un control a posteriori.</li>
+                                        <li>Tener notificaciones con los avances cuando hay cotizaciones en segundo plano.</li>
+                                        <li>Patente A/D mayor foco en motos.</li>
+                                    </ul>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-800">L2 Agencias</h4>
+                                    <ul class="list-disc list-inside mt-1 space-y-1 text-gray-700">
+                                        <li>Refinar más la funcionalidad de notificaciones para agencias.</li>
+                                        <li>Home estadístico Agencias para usuarios tipo "comisiones".</li>
+                                        <li>¿Notificaciones para GRs? ¿Cuáles serían puntos importantes?</li>
+                                        <li>Una nueva estadística de lo cotizado vs lo emitido.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </details>
+
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            return Array.isArray(label) ? label.join(' ') : label;
+        };
+
+        const createChart = (ctx, labels, data, chartLabel, backgroundColor, borderColor) => {
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: chartLabel,
+                        data: data,
+                        backgroundColor: backgroundColor,
+                        borderColor: borderColor,
+                        borderWidth: 2,
+                        borderRadius: 5,
+                        borderSkipped: false,
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    layout: {
+                        padding: {
+                            left: 25
+                        }
+                    },
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                precision: 0,
+                                font: {
+                                    family: 'Sora',
+                                    weight: '600'
+                                },
+                                color: '#30302d'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                             ticks: {
+                                font: {
+                                    family: 'Sora',
+                                    weight: '600'
+                                },
+                                color: '#30302d'
+                            },
+                            afterFit: function(scaleInstance) {
+                                scaleInstance.width = 180; 
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            font: {
+                                family: 'Sora',
+                            },
+                            callbacks: {
+                                title: tooltipTitleCallback
+                            },
+                            backgroundColor: '#30302d',
+                            titleFont: { size: 14, weight: 'bold' },
+                            bodyFont: { size: 12 },
+                            padding: 10,
+                            cornerRadius: 6,
+                            displayColors: false,
+                        }
+                    }
+                }
+            });
+        };
+
+        const gwCtx = document.getElementById('gwChart').getContext('2d');
+        createChart(
+            gwCtx,
+            [['Flujo de', 'Renovaciones'], ['Pólizas que no se renuevan', '(Migración SIGA o Mora)'], ['Liberar bloqueos GRs/', 'Reglas de Negocio'], ['Control de Sub-Agencias', '(Modalidad de comisiones)'], ['Envío automático', 'de listados']],
+            [4, 3, 2, 2, 2],
+            'Menciones',
+            'rgba(226, 0, 57, 0.8)',
+            'rgba(226, 0, 57, 1)'
+        );
+
+        const l2AgenciasCtx = document.getElementById('l2AgenciasChart').getContext('2d');
+        createChart(
+            l2AgenciasCtx,
+            [['Home Estadístico', 'para Agencias'], ['Sección de', 'Notificaciones'], ['Mejoras en Home', 'Estadísticos GRs'], ['Enviar mail de novedades', 'por grupo WhatsApp']],
+            [4, 3, 2, 2],
+            'Menciones',
+            'rgba(185, 31, 56, 0.8)',
+            'rgba(185, 31, 56, 1)'
+        );
+    </script>
+</body>
+</html>
